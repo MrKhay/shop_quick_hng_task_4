@@ -684,7 +684,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
                   // start confetti
                   controller.play();
-                  await Future.delayed(const Duration(milliseconds: 20000));
+                  await Future.delayed(const Duration(milliseconds: 10000));
                   // stop confetti
                   controller.stop();
                 },
