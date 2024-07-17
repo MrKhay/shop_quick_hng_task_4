@@ -1,6 +1,6 @@
-# HNG Task 3
+# HNG Task 4
 
-## Sharrie’s Signature
+## Shop Quick
 
 ## Description
 
@@ -35,12 +35,17 @@ Conventional Commits is a specification for adding human and machine-readable me
 
 ## Objectives
 
-- Create a pixel-perfect shopping app based on the Timbu Shop designs.
-- Products screen shows a list of products/items.
-- Checkout screen displays the products added for checkout.
-- Functionality to add and remove items from the checkout.
-- A button to navigate to an "Order Successful" screen from the checkout screen.
-- Proper UI state management and error handling.
+- Create a pixel-perfect shopping app based on the Timbu Shop designs.**
+
+- All products must be fetched from the Timbu API. No Placeholder should be found in your app.
+- Have at least 20 Unique Products in your product list. They should be categorized.
+- Implement the feature of adding and removing products, wishlist or bookmark, checkout of order etc. based on your Timbu Shop design.
+- Provide a good shopping experience from start to the completion of an order.
+- Create an Orders history screen showing all the completed orders made on your Timbu shop. Add an icon on your home screen top bar that navigates to the order history screen. Come up with the design if not available.
+- The Orders history item when clicked must go to a details screen of that order and show details of that order.
+- The items in the order history screen and details should be cached in a database.
+- Ensure proper UI state management and handle errors properly.
+- Fix all noticeable issues.
 
 ## Acceptance Criteria
 
@@ -50,17 +55,21 @@ Conventional Commits is a specification for adding human and machine-readable me
 
 ## Screenshots
 
-| Products Screen                                                                 | Product Detail Screen                                                             | Checkout  Screen                                                                  | Order Successful Screen                                                           |
+| Products Screen                                                                 | Product Detail Screen                                                             | Checkout Screen                                                                  | Order Successful Screen                                                           |
 |---------------------------------------------------------------------------------|----------------------------------------------------------------------------------|----------------------------------------------------------------------------------|-----------------------------------------------------------------------------------|
 | ![Products Screen](screenshots/products_screen.png)                             | ![Product Detail Screen](screenshots/product_detail_screen.png)                   | ![Checkout Screen](screenshots/checkout_screen.png)                              | ![Order Successful Screen](screenshots/order_successful_screen.png)               |
+
+| Wishlist Screen                                                                 | Cart Screen                                                                      | History Screen                                                                   |                                                                                   |
+|---------------------------------------------------------------------------------|----------------------------------------------------------------------------------|----------------------------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| ![Wishlist Screen](screenshots/wishlist_screen.png)                             | ![Cart Screen](screenshots/cart_screen.png)                                       | ![History Screen](screenshots/history_screen.png)                                |                                                                                   |
 
 ## Setup Instructions
 
 1. Clone the repository:
 
     ```sh
-    git clone https://github.com/MrKhay/sharrie_signature_hng_task_3.git
-    cd sharrie_signature_hng_task_3
+    git clone https://github.com/MrKhay/shop_quick_hng_task_4.git 
+    cd shop_quick_hng_task_4
     ```
 
 2. Open the project in your chosen development environment (e.g., Android Studio for Android, Xcode for iOS).
@@ -77,7 +86,7 @@ Download the APK file from [here](https://github.com/MrKhay/sharrie_signature_hn
 
 ## Appetize.io Showcase
 
-Check out the virtualized demonstration of the app on [Appetize.io](https://appetize.io/app/b_4ktr6tmpx45sz45vausfolxdmm).
+Check out the virtualized demonstration of the app on [Appetize.io](https://appetize.io/app/b_ujuel7lkql4wnhbabtui74zld4).
 
 ## Contact
 
