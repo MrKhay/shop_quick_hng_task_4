@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shop_quick/features/_common/notifiers/order_history_data_notifier/order_history_data_notifier.dart';
 import 'features/features.dart';
 
 ///
@@ -25,15 +26,20 @@ class _ShopFastState extends ConsumerState<ShopFast> {
 
     // load network state
     ref.read(networkStateNotifierProvider);
+
+    // load wishlist
+    ref.read(wishListDataNotifierProvider);
+
+    // load order history
+    ref.read(orderHistoryDataNotifierProvider);
   }
 
   @override
   Widget build(BuildContext context) {
     List screens = [
       const HomeScreen(),
-      underConstruction(context),
-      underConstruction(context),
-      underConstruction(context),
+      const WishListScreen(),
+      const CartScreen(),
     ];
     return Scaffold(
       body: screens[_selectedIndex],
@@ -55,7 +61,8 @@ class _ShopFastState extends ConsumerState<ShopFast> {
           ))),
           child: NavigationBar(
             backgroundColor: context.colorScheme.surface,
-            indicatorColor: Colors.transparent,
+            indicatorColor: context.colorScheme.surface,
+
             selectedIndex: _selectedIndex,
 
             onDestinationSelected: (int index) {
@@ -69,7 +76,7 @@ class _ShopFastState extends ConsumerState<ShopFast> {
             destinations: <Widget>[
               NavigationDestination(
                 icon: Icon(
-                  Icons.home,
+                  Icons.home_outlined,
                   color: context.colorScheme.outline,
                 ),
                 selectedIcon: const Icon(Icons.home),
@@ -77,7 +84,7 @@ class _ShopFastState extends ConsumerState<ShopFast> {
               ),
               NavigationDestination(
                 icon: Icon(
-                  Icons.favorite,
+                  Icons.favorite_border,
                   color: context.colorScheme.outline,
                 ),
                 selectedIcon: const Icon(Icons.favorite),
@@ -85,19 +92,11 @@ class _ShopFastState extends ConsumerState<ShopFast> {
               ),
               NavigationDestination(
                 icon: Icon(
-                  Icons.person_2_outlined,
+                  Icons.shopping_basket_outlined,
                   color: context.colorScheme.outline,
                 ),
-                selectedIcon: const Icon(Icons.person_2_outlined),
-                label: kProfile,
-              ),
-              NavigationDestination(
-                icon: Icon(
-                  Icons.search,
-                  color: context.colorScheme.outline,
-                ),
-                selectedIcon: const Icon(Icons.search),
-                label: kSearch,
+                selectedIcon: const Icon(Icons.shopping_basket_rounded),
+                label: kCart,
               ),
             ],
           ),

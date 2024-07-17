@@ -1,7 +1,3 @@
-import 'dart:math';
-
-import 'package:flutter/material.dart';
-
 /// DateTime Extension
 extension DateTimeFormatter on DateTime {
   String formatTime() {
@@ -11,7 +7,7 @@ extension DateTimeFormatter on DateTime {
     return '$hour:$minute $period';
   }
 
-  String formatAttendanceDateTime() {
+  String formatCurrentDateTime() {
     final DateTime now = DateTime.now();
     final Duration difference = now.difference(this);
 
@@ -95,12 +91,4 @@ extension DateTimeFormatter on DateTime {
         return '';
     }
   }
-}
-
-int generateRandomColor() {
-  final List<MaterialColor> colors = <MaterialColor>[...Colors.primaries];
-
-  final MaterialColor color = colors[Random().nextInt(colors.length)];
-
-  return color.value;
 }

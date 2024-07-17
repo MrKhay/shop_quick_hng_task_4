@@ -1,76 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../../shop_quick.dart';
+import 'package:shop_quick/shop_quick.dart';
+
 import '../../../features.dart';
 
-///
-class CartScreen extends ConsumerStatefulWidget {
-  /// Shows all orders
-  const CartScreen({super.key});
+class OrderHistoryDetailScreen extends ConsumerStatefulWidget {
+  final List<Order?> orders;
+  const OrderHistoryDetailScreen({super.key, required this.orders});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => CartScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _OrderHistoryDetailScreenState();
 }
 
-///
-class CartScreenState extends ConsumerState<CartScreen> {
+class _OrderHistoryDetailScreenState
+    extends ConsumerState<OrderHistoryDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    final AsyncValue<List<Order>?> ordersState =
-        ref.watch(ordersDataNotifierProvider);
-
     return Scaffold(
       backgroundColor: context.colorScheme.surface,
-      appBar: appBar(context: context, title: kCart),
+      appBar: appBar(context: context, title: kOrder),
       body: Padding(
-        padding:
-            const EdgeInsets.symmetric(horizontal: kGap_3, vertical: kGap_3),
-        child: ordersState.maybeWhen(
-          orElse: _loading,
-          loading: _loading,
-          error: (Object error, StackTrace stackTrace) => errorWidget(
-            context: context,
-            errorMsg: error.toString(),
-          ),
-          data: (List<Order>? data) {
-            if (data == null) {
-              return errorWidget(
-                context: context,
-              );
-            }
-
-            return _body(data);
-          },
-        ),
-      ),
+          padding:
+              const EdgeInsets.symmetric(horizontal: kGap_3, vertical: kGap_3),
+          child: _body(widget.orders)),
     );
   }
 
-  Widget _loading() {
-    return Center(
-        child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        SizedBox(
-          width: context.textTheme.titleLarge?.fontSize,
-          height: context.textTheme.titleLarge?.fontSize,
-          child: const CircularProgressIndicator.adaptive(),
-        ),
-        const SizedBox(height: kGap_2),
-        Text(
-          kFetchingProducts,
-          style: context.textTheme.bodySmall?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: context.colorScheme.outline,
-          ),
-        ),
-      ],
-    ));
-  }
-
-  Widget _body(List<Order> orders) {
+  Widget _body(List<Order?> orders) {
     final double height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
@@ -86,8 +45,11 @@ class CartScreenState extends ConsumerState<CartScreen> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: orders.length,
                     itemBuilder: (BuildContext context, int index) {
-                      final Order order = orders[index];
-                      return orderTile(context, order, ref);
+                      final Order? order = orders[index];
+                      if (order != null) {
+                        return _orderTile(context, order, ref);
+                      }
+                      return null;
                     },
                     separatorBuilder: (BuildContext context, int index) =>
                         const SizedBox(height: kGap_1),
@@ -203,7 +165,7 @@ Widget _productYouMightLikeGrid(BuildContext context) {
   });
 }
 
-Widget _cartSummary(BuildContext context, List<Order> orders) {
+Widget _cartSummary(BuildContext context, List<Order?> orders) {
   var navigator = Navigator.of(context);
   var deliveryCost = orders.length * 0.5;
   // sum up price of all products
@@ -284,30 +246,6 @@ Widget _cartSummary(BuildContext context, List<Order> orders) {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            // cancle btn
-            Consumer(builder: (context, ref, child) {
-              return OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: kGap_1, vertical: kGap_1),
-                    shape: ContinuousRectangleBorder(
-                        borderRadius: BorderRadius.circular(kGap_1)),
-                    side: BorderSide(
-                        color: context.colorScheme.onPrimaryContainer)),
-                child: Text(
-                  kCancel,
-                  style: context.textTheme.bodyLarge?.copyWith(
-                    color: context.colorScheme.onPrimaryContainer,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                onPressed: () async {
-                  /// clear order
-                  ref.read(ordersDataNotifierProvider.notifier).clearOrders();
-                },
-              );
-            }),
-
             const Spacer(),
             // price
             Column(
@@ -316,7 +254,7 @@ Widget _cartSummary(BuildContext context, List<Order> orders) {
               children: [
                 /// Total amount
                 Text(
-                  kTotalAmount,
+                  kTotalSpent,
                   style: context.textTheme.bodyMedium?.copyWith(
                     color: context.colorScheme.outline,
                   ),
@@ -334,32 +272,6 @@ Widget _cartSummary(BuildContext context, List<Order> orders) {
               ],
             ),
             const Spacer(),
-
-            /// check out btn
-            Consumer(builder: (context, ref, child) {
-              return FilledButton(
-                style: FilledButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: kGap_1, vertical: kGap_1),
-                  shape: ContinuousRectangleBorder(
-                      borderRadius: BorderRadius.circular(kGap_2)),
-                ),
-                child: Text(
-                  kCheckout,
-                  style: context.textTheme.bodyLarge?.copyWith(
-                    color: context.colorScheme.onPrimary,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                onPressed: () async {
-                  /// naviagte to order success screen
-                  navigator.push(MaterialPageRoute<dynamic>(
-                    builder: (BuildContext context) =>
-                        CheckoutScreen(orders: orders),
-                  ));
-                },
-              );
-            }),
           ],
         ),
       ],
@@ -368,11 +280,10 @@ Widget _cartSummary(BuildContext context, List<Order> orders) {
 }
 
 ///
-Widget orderTile(BuildContext context, Order order, WidgetRef ref) {
+Widget _orderTile(BuildContext context, Order order, WidgetRef ref) {
   final double width = MediaQuery.of(context).size.width;
   final double totalPrice = order.product.currentPrice * order.quantity;
-  final OrdersDataNotifier ordersNotifier =
-      ref.read(ordersDataNotifierProvider.notifier);
+
   return Container(
     height: double.infinity,
     margin: const EdgeInsets.only(bottom: kGap_2),
@@ -385,6 +296,7 @@ Widget orderTile(BuildContext context, Order order, WidgetRef ref) {
     ),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         // img
         Flexible(
@@ -418,6 +330,7 @@ Widget orderTile(BuildContext context, Order order, WidgetRef ref) {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Flexible(
                         child: Column(
@@ -437,8 +350,6 @@ Widget orderTile(BuildContext context, Order order, WidgetRef ref) {
                             /// name
                             Text(
                               order.product.name,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
                               style: context.textTheme.bodyLarge?.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -448,28 +359,30 @@ Widget orderTile(BuildContext context, Order order, WidgetRef ref) {
                       ),
                       const SizedBox(width: kGap_2),
                       Flexible(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // id
-                            Text(
-                              kUnitePrice,
-                              style: context.textTheme.bodySmall?.copyWith(
-                                color: context.colorScheme.outline,
-                                letterSpacing: kGap_01,
-                                fontWeight: FontWeight.w300,
+                        child: Container(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // id
+                              Text(
+                                kUnitePrice,
+                                style: context.textTheme.bodySmall?.copyWith(
+                                  color: context.colorScheme.outline,
+                                  letterSpacing: kGap_01,
+                                  fontWeight: FontWeight.w300,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: kGap_1),
+                              const SizedBox(height: kGap_1),
 
-                            /// Price
-                            Text(
-                              r'$' + totalPrice.toStringAsFixed(2),
-                              style: context.textTheme.bodyLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
+                              /// Price
+                              Text(
+                                r'$' + totalPrice.toStringAsFixed(2),
+                                style: context.textTheme.bodyLarge?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -480,45 +393,23 @@ Widget orderTile(BuildContext context, Order order, WidgetRef ref) {
                   Flexible(
                     child: Row(
                       children: [
-                        CounterWidget.small(
-                          initialValue: order.quantity,
-                          onCountChange: (int quantity) {
-                            ///
-                            ordersNotifier.modifyOrderQuantity(
-                                quantity, order.id);
-                          },
-                        ),
-
-                        /// remove btn
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(kGap_2),
+                        // qty
+                        Text(
+                          kQty,
+                          style: context.textTheme.bodySmall?.copyWith(
+                            color: context.colorScheme.outline,
+                            letterSpacing: kGap_01,
+                            fontWeight: FontWeight.w600,
                           ),
-                          child: IconButton(
-                              onPressed: () async {
-                                final bool? responce =
-                                    await showConfirmationDialog(
-                                  context,
-                                  titleText: kRemoveOrderFromCartInfo,
-                                  actionTxtColor: context.colorScheme.onPrimary,
-                                  actionBtnColor: context.colorScheme.primary,
-                                );
-                                if (responce == null) return;
-
-                                // when accepted
-                                if (responce) {
-                                  ref
-                                      .read(ordersDataNotifierProvider.notifier)
-                                      .removeNewOrder(order);
-
-                                  context.showSnackBar(kOrderRemoved,
-                                      type: SnackBarType.success);
-                                }
-                              },
-                              icon: Icon(
-                                Icons.delete,
-                                color: context.colorScheme.error,
-                              )),
+                        ),
+                        const SizedBox(width: kGap_0),
+                        Text(
+                          order.quantity.toString(),
+                          style: context.textTheme.bodySmall?.copyWith(
+                            color: context.colorScheme.outline,
+                            letterSpacing: kGap_01,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ],
                     ),

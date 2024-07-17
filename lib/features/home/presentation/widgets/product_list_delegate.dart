@@ -39,7 +39,7 @@ class ProductListSearchDelegate extends SearchDelegate {
       child: Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) {
           final List<Product> productList =
-              ref.watch(productsDataNotifierProvider).value?.deals ??
+              ref.watch(productsDataNotifierProvider).value?.products ??
                   <Product>[];
 
           // Filtering attendance logs based on query
@@ -78,7 +78,7 @@ class ProductListSearchDelegate extends SearchDelegate {
       child: Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) {
           final List<Product> productList =
-              ref.watch(productsDataNotifierProvider).value?.deals ??
+              ref.watch(productsDataNotifierProvider).value?.products ??
                   <Product>[];
 
           // Filtering attendance logs based on query

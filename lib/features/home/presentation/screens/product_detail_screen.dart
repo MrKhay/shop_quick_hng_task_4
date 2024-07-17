@@ -23,36 +23,44 @@ class ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
   int _quantityCount = 1;
   //
   bool addedToCart = false;
+  //
+  bool isAddedToWishList = false;
+  //
+  String orderId = "";
+
+  @override
+  void initState() {
+    super.initState();
+    var wishList = ref.read(wishListDataNotifierProvider).value ?? [];
+
+    // when product id is found inside wishlist
+    if (wishList.contains(widget.product.id)) {
+      setState(() {
+        isAddedToWishList = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var navigator = Navigator.of(context);
     return Scaffold(
       appBar: appBar(
-          context: context,
-          backgroundColor: context.colorScheme.surfaceContainerHighest,
-          bottom: const PreferredSize(
-              preferredSize: Size.fromHeight(1), child: SizedBox()),
-          title: '',
-          leading: IconButton.filled(
-            padding: const EdgeInsets.only(left: kGap_0),
-            style: IconButton.styleFrom(
-                backgroundColor: context.colorScheme.surface),
-            onPressed: () {
-              navigator.pop();
-            },
-            icon: Icon(Icons.adaptive.arrow_back),
-          ),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  navigator.push(MaterialPageRoute(
-                    builder: (context) => const CartScreen(),
-                  ));
-                },
-                icon: const Icon(
-                  Icons.shopping_cart_outlined,
-                ))
-          ]),
+        context: context,
+        backgroundColor: context.colorScheme.surfaceContainerHighest,
+        bottom: const PreferredSize(
+            preferredSize: Size.fromHeight(1), child: SizedBox()),
+        title: '',
+        leading: IconButton.filled(
+          padding: const EdgeInsets.only(left: kGap_0),
+          style: IconButton.styleFrom(
+              backgroundColor: context.colorScheme.surface),
+          onPressed: () {
+            navigator.pop();
+          },
+          icon: Icon(Icons.adaptive.arrow_back),
+        ),
+      ),
       body: _body(),
       bottomNavigationBar: _footer(),
     );
@@ -103,15 +111,34 @@ class ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                     ),
                   ),
 
-                  /// status
-                  Text(
-                    kInStock,
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      color: context.colorScheme.primary,
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: kGap_01,
-                    ),
-                  ),
+                  /// favorite
+                  IconButton.outlined(
+                    onPressed: () {
+                      if (isAddedToWishList) {
+                        ref
+                            .read(wishListDataNotifierProvider.notifier)
+                            .removeProductIdFromWishList(product.id);
+
+                        context.showSnackBar(kRemovedFromWishlist,
+                            type: SnackBarType.error);
+                      } else {
+                        ref
+                            .read(wishListDataNotifierProvider.notifier)
+                            .addProductIdToWishList(product.id);
+
+                        context.showSnackBar(kAddedToWishlist);
+                      }
+
+                      // update state
+                      setState(() {
+                        isAddedToWishList = !isAddedToWishList;
+                      });
+                    },
+                    color: isAddedToWishList ? Colors.red : null,
+                    icon: isAddedToWishList
+                        ? const Icon(Icons.favorite)
+                        : const Icon(Icons.favorite_border),
+                  )
                 ],
               ),
 
@@ -140,30 +167,21 @@ class ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
 
               const SizedBox(height: kGap_3),
 
-              // How to use
-              const ExpansionTile(
-                title: Text(kHowToUse),
-                initiallyExpanded: true,
-              ),
-              const SizedBox(height: kGap_1),
-
-              // How to use
-              const ExpansionTile(
-                title: Text(kDeliveryAndDropOff),
-              ),
-
-              const SizedBox(height: kGap_2),
               // qty  /// Quantity btn
-              AbsorbPointer(
-                absorbing: addedToCart == true,
-                child: CounterWidget.small(
-                  initialValue: _quantityCount,
-                  onCountChange: (int quantity) {
-                    setState(() {
-                      _quantityCount = quantity;
-                    });
-                  },
-                ),
+              CounterWidget.small(
+                initialValue: _quantityCount,
+                onCountChange: (int quantity) {
+                  // update provider when product has been added to cart
+                  if (addedToCart) {
+                    ///
+                    ref
+                        .read(ordersDataNotifierProvider.notifier)
+                        .modifyOrderQuantity(quantity, orderId);
+                  }
+                  setState(() {
+                    _quantityCount = quantity;
+                  });
+                },
               ),
               const SizedBox(height: kGap_1),
             ],
@@ -235,6 +253,7 @@ class ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                 ),
                 onPressed: () async {
                   final String id = 'RS34$randInt';
+                  orderId = id;
 
                   final Order order = Order(
                     id: id,
@@ -281,7 +300,7 @@ class ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                 side:
                     BorderSide(color: context.colorScheme.onPrimaryContainer)),
             child: Text(
-              kCancle,
+              kCancel,
               style: context.textTheme.bodyLarge?.copyWith(
                 color: context.colorScheme.onPrimaryContainer,
                 fontWeight: FontWeight.w500,

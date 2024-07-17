@@ -1,29 +1,29 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'products_data_notifier.dart';
+part of 'wishlist_data_notifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$productsDataNotifierHash() =>
-    r'3ba1a312c9ebe792764ae1f29ec7ede4d7729fe6';
+String _$wishListDataNotifierHash() =>
+    r'1b466dd7d0394752bb11da3290855cddfbc18912';
 
 /// Manages [Product]
 ///
-/// Copied from [ProductsDataNotifier].
-@ProviderFor(ProductsDataNotifier)
-final productsDataNotifierProvider =
-    AsyncNotifierProvider<ProductsDataNotifier, ProductsDataType?>.internal(
-  ProductsDataNotifier.new,
-  name: r'productsDataNotifierProvider',
+/// Copied from [WishListDataNotifier].
+@ProviderFor(WishListDataNotifier)
+final wishListDataNotifierProvider =
+    AsyncNotifierProvider<WishListDataNotifier, List<String>?>.internal(
+  WishListDataNotifier.new,
+  name: r'wishListDataNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$productsDataNotifierHash,
+      : _$wishListDataNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$ProductsDataNotifier = AsyncNotifier<ProductsDataType?>;
+typedef _$WishListDataNotifier = AsyncNotifier<List<String>?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

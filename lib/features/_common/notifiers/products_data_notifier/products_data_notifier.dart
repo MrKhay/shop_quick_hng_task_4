@@ -4,10 +4,8 @@ import '../../../features.dart';
 part 'products_data_notifier.g.dart';
 
 typedef ProductsDataType = ({
-  List<Product> deals,
-  List<Product> justForYou,
+  List<Product> products,
   List<Product> youMightLike,
-  List<Product> recentlyViewed,
 });
 
 @Riverpod(keepAlive: true)
@@ -62,10 +60,8 @@ class ProductsDataNotifier extends _$ProductsDataNotifier {
 
     /// update state
     state = AsyncValue<ProductsDataType?>.data((
-      deals: products,
-      justForYou: products.getJustForYouProducts(),
+      products: products,
       youMightLike: products.getYouMightLikeProducts(),
-      recentlyViewed: const [],
     ));
   }
 }

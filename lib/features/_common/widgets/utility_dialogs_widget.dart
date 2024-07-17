@@ -12,10 +12,11 @@ Future<bool?> showConfirmationDialog(
     context: context,
     barrierDismissible: false,
     builder: (BuildContext context) => AlertDialog(
-      backgroundColor: context.colorScheme.outlineVariant,
+      backgroundColor: context.colorScheme.inverseSurface,
       content: Text(titleText,
           style: context.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
+            color: context.colorScheme.onInverseSurface,
           )),
       actions: <Widget>[
         TextButton(
@@ -25,12 +26,14 @@ Future<bool?> showConfirmationDialog(
           child: Text(
             kNo,
             style: context.textTheme.bodyLarge?.copyWith(
-              color: context.colorScheme.outline,
+              color: context.colorScheme.onInverseSurface,
             ),
           ),
         ),
         MaterialButton(
           color: actionBtnColor ?? context.colorScheme.error,
+          shape: ContinuousRectangleBorder(
+              borderRadius: BorderRadius.circular(kGap_4)),
           onPressed: () {
             Navigator.of(context).pop(true);
           },

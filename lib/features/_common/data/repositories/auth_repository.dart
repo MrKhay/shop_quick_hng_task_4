@@ -38,7 +38,7 @@ class AuthRepository {
                 'FFFailed to fetch data. Status code: ${response.statusCode}');
       }
     } on HttpException catch (e) {
-      return CustomResponse<Session>(error: e.message);
+      return CustomResponse<Session>(error: kSomethingWentWrong);
     } catch (e) {
       return CustomResponse<Session>(error: 'An unexpected error occurred: $e');
     }

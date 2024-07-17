@@ -5,6 +5,23 @@ import '../../features.dart';
 /// [Product] extension
 extension ProductExtensions on List<Product> {
   /// Returns all categories in [Product] list
+  List<String> getCategories() {
+    final List<String> categories = <String>[];
+
+    // Added default category
+    categories.add('all');
+
+    for (final Product product in this) {
+      for (final String category in product.categories ?? <String>[]) {
+        if (!categories.contains(category)) {
+          categories.add(category);
+        }
+      }
+    }
+    return categories;
+  }
+
+  /// Returns all categories in [Product] list
   List<Collection> getCollections() {
     List<String> collectionNames = <String>[];
 
@@ -25,6 +42,7 @@ extension ProductExtensions on List<Product> {
             ))
         .toList();
 
+    collections.sort((a, b) => a.name.compareTo(b.name));
     return collections;
   }
 
