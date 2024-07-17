@@ -82,7 +82,7 @@ View design [here](https://www.figma.com/design/clF99fTP4N8Brmt0PtPz5C/HNG-Inter
 
 ## APK Download
 
-Download the APK file from [here](https://github.com/MrKhay/sharrie_signature_hng_task_3/releases/tag/v1.0.2).
+Download the APK file from [here](https://github.com/MrKhay/shop_quick_hng_task_4/releases/tag/v1.0.0).
 
 ## Appetize.io Showcase
 
