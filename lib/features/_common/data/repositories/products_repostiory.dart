@@ -14,7 +14,7 @@ class ProdcutsRepostiory {
   /// Returns list of [Product]
   Future<CustomResponse<List<Product>>> getProducts(Session session) async {
     final Uri url = Uri.parse(
-        '$kTimuApiBaseUrl/products?organization_id=$kTimuOrganisationID&size=10');
+        '$kTimuApiBaseUrl/products?organization_id=$kTimuOrganisationID&size=20');
 
     try {
       final http.Response response = await http.get(
