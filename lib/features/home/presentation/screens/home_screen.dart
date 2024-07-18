@@ -328,17 +328,15 @@ Widget productCard(Product product, BuildContext context) {
                       const SizedBox(height: kGap_0),
 
                       /// Pricet
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            r'$' + product.currentPrice.toStringAsFixed(2),
-                            style: context.textTheme.bodyLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: context.colorScheme.onSurface,
-                            ),
+                      FittedBox(
+                        child: Text(
+                          r'$' + product.currentPrice.toStringAsFixed(2),
+                          maxLines: 1,
+                          style: context.textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: context.colorScheme.onSurface,
                           ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
