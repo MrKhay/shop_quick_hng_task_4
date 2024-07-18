@@ -227,7 +227,7 @@ class ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                 /// Price
                 Text(
                   r'$' +
-                      (product.currentPrice + _quantityCount)
+                      (product.currentPrice * _quantityCount)
                           .toStringAsFixed(2),
                   style: context.textTheme.titleLarge?.copyWith(
                     color: context.colorScheme.onPrimary,
@@ -330,7 +330,7 @@ class ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
               /// Price
               Text(
                 r'$' +
-                    (product.currentPrice + _quantityCount).toStringAsFixed(2),
+                    (product.currentPrice * _quantityCount).toStringAsFixed(2),
                 style: context.textTheme.titleLarge?.copyWith(
                   color: context.colorScheme.onPrimaryContainer,
                   fontWeight: FontWeight.w500,

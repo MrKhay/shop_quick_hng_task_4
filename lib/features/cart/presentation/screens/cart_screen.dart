@@ -208,7 +208,7 @@ Widget _cartSummary(BuildContext context, List<Order> orders) {
   var deliveryCost = orders.length * 0.5;
   // sum up price of all products
   final double totalPrice = orders.totalPrice();
-  final String price = r'$' + totalPrice.toStringAsFixed(2);
+  final String price = r'$' + (totalPrice).toStringAsFixed(2);
   return AnimatedContainer(
     duration: const Duration(milliseconds: 250),
     padding: const EdgeInsets.all(kGap_2),
@@ -325,7 +325,7 @@ Widget _cartSummary(BuildContext context, List<Order> orders) {
 
                 /// Price
                 Text(
-                  price,
+                  r'$' + (deliveryCost + totalPrice).toStringAsFixed(2),
                   style: context.textTheme.titleLarge?.copyWith(
                     color: context.colorScheme.onPrimaryContainer,
                     fontWeight: FontWeight.w600,

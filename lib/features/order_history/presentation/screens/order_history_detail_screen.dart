@@ -263,7 +263,7 @@ Widget _cartSummary(BuildContext context, List<Order?> orders) {
 
                 /// Price
                 Text(
-                  price,
+                  r'$' + (deliveryCost + totalPrice).toStringAsFixed(2),
                   style: context.textTheme.titleLarge?.copyWith(
                     color: context.colorScheme.onPrimaryContainer,
                     fontWeight: FontWeight.w600,
